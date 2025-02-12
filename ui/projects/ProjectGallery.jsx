@@ -17,7 +17,7 @@ const ProjectGallery = ({ project, closeGallery, language, toggleLanguage }) => 
         <section className="fixed inset-0 z-30 flex">
             <article className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
                 <button
-                    className="p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded border"
+                    className="p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
                     onClick={toggleLanguage}
                 >
                     {language === 'en' ? 'ru' : 'en'}
@@ -29,16 +29,16 @@ const ProjectGallery = ({ project, closeGallery, language, toggleLanguage }) => 
             </article>
             <div className="relative flex flex-col w-2/3 p-4 bg-black border">
                 <button
-                    className="relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded border"
+                    className="relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
                     onClick={closeGallery}
                 >
                     ✕
                 </button>
-                <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded">
+                <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded-sm">
                     {project.media.map((mediaItem, index) => (
                         <div
                             key={index}
-                            className="relative w-full h-fit mb-4 border cursor-pointer rounded"
+                            className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
                             onClick={() => handleMediaClick(mediaItem.src, mediaItem.type)}
                         >
                             <MediaViewer type={mediaItem.type} src={mediaItem.src} />

@@ -9,7 +9,7 @@ const Layout = ({ children, pageHeading }) => {
             </header>
             {children}
             <footer className="fixed flex flex-row bottom-3 left-0 right-0 text-[40px] uppercase z-10 justify-between px-10">
-                <div className="flex flex-row items-center flex-grow">
+                <div className="flex flex-row items-center grow">
                     <span className="pr-1.5">/</span>
                     <h1>{pageHeading}</h1>
                 </div>
