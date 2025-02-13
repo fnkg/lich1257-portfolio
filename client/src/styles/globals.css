@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #888;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  color: rgb(var(--foreground-rgb));
+  background: url('../public/assets/bg.png') no-repeat center center fixed;
+  background-size: cover;
+  /* background-color: #555; */
+}
+
+.backgroundVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+
+
+/* Debug Apative */
+/* sm */
+@media only screen and (min-width: 640px) {
+  body {
+    background-color: #29fd2f;
+  }
+}
+
+/* lg */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  body {
+    background-color: #cded14;
+  }
+}
+
+/* xl */
+@media only screen and (min-width: 1024px) and (max-width: 1280px) {
+  body {
+    background-color: #1f23aa;
+  }
+}
+
+/* 2xl */
+@media only screen and (min-width: 1280px) and (max-width:1536px) {
+  body {
+    background-color: #e01ab5;
+  }
+}
+
+@media only screen and (min-width: 1536px) {
+  body {
+    background-color: #0fd4ad;
+  }
+}
