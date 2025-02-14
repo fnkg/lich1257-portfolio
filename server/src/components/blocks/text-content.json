@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_text_contents",
+  "info": {
+    "displayName": "Text Content"
+  },
+  "options": {},
+  "attributes": {
+    "en": {
+      "type": "richtext"
+    },
+    "ru": {
+      "type": "richtext"
+    }
+  }
+}

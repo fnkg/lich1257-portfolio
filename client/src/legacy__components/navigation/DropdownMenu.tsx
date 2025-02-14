@@ -1,0 +1,82 @@
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import AudioMenu from './AudioMenu';
+import { randomText } from '@/utils/randomText'
+
+interface DropdownMenuProps {
+    linkName: string;
+    links: { key: string; name: string; href: string }[];
+    isOpen: boolean;
+    onToggle: () => void;
+    targetBlank: boolean;
+}
+
+export default function DropdownMenu({ linkName, links, isOpen, onToggle, targetBlank }: DropdownMenuProps) {
+    const dropdownRef = useRef<HTMLLIElement>(null);
+    const [categoryName, setCategoryName] = useState(Array(links.length).fill(""));
+
+    useEffect(() => {
+        if (isOpen) {
+            const newCategoryName = Array(links.length).fill("");
+            setCategoryName(newCategoryName);
+
+            links.forEach((link, index) => {
+                randomText(link.name, (newLink) => {
+                    setCategoryName((prevLink) => {
+                        const updatedTexts = [...prevLink];
+                        updatedTexts[index] = newLink;
+                        return updatedTexts;
+                    });
+                }, 20);
+            });
+        }
+    }, [isOpen, links]);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            onToggle(); // Close the dropdown
+            }
+        }
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen, onToggle]);
+
+    const handleLinkClick = () => {
+        onToggle(); // Close the dropdown when a link is clicked
+    };
+
+    return (
+        <li className="ml-4" ref={dropdownRef}>
+            <button className="audioMenuMain hover:text-[#00ff00] cursor-pointer" onClick={onToggle}>
+                {linkName}
+            </button>
+            {isOpen && (
+                <ul className="mt-1.5 text-lg lg:text-2xl xl:text-3xl absolute">
+                    <AudioMenu />
+                    {links.map((link, index) => (
+                        <li key={link.key} className="px-1.5 border first:border-t-0 border-b-0 last:border-b border-white">
+                            <Link
+                                href={link.href}
+                                target={targetBlank ? "_blank" : "_self"}
+                                rel={targetBlank ? "noopener noreferrer" : ""}
+                                className="audioMenuCat hover:text-[#00ff00]"
+                                onClick={handleLinkClick}
+                            >
+                                <h3>{categoryName[index]}</h3>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </li>
+    );
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { freepixel } from "@/ui/fonts";
+import { freepixel } from "@/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -20,9 +20,9 @@ export default function RootLayout({
       <body className={freepixel.className}>
         {children}
 
-        <video autoPlay muted loop className="backgroundVideo">
+        {/* <video autoPlay muted loop className="backgroundVideo">
           <source src="/assets/background.mp4" type="video/mp4" />
-        </video>
+        </video> */}
       </body>
     </html>
   );

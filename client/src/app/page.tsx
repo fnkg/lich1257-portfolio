@@ -1,13 +1,25 @@
-// import Cube from '@/ui/cube/cube'
-import { MainNavigation } from '@/ui/navigation/MainNavigation';
-
+import { Header } from "@/components/layout/Header";
+import { getHomePage } from "@/data/loaders";
 import { notFound } from "next/navigation";
 
-export default function HomeRoute() {
+async function loader() {
+  const data = await getHomePage();
+  if (!data) notFound();
+  return { ...data.data };
+}
+
+export default async function HomeRoute() {
+  const data = await loader();
+  const background = data.background;
+
+  console.log(background);
+
   return (
     <div className="w-full h-full">
-      <MainNavigation />
-      {/* <Cube /> */}
+      <Header data={data.header} />
+      {/* <video autoPlay muted loop className="backgroundVideo">
+        <source src={`http://localhost:1337/${background.url}`} type="video/mp4" />
+      </video> */}
     </div>
   );
 }

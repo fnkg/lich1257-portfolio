@@ -36,7 +36,7 @@ export default function About() {
                         <p>graduated from «stroganov russian state university of design and applied arts (book illustration graphics)</p>
                         <p>graduated from moscow music school (stage lighting design)</p>
                         <p>working as freelancer</p>
-                        <p>and multimedia developer (in <a href='https://www.gutor.pro/' target="_blank">gutor production🔗</a>)</p>
+                        <p>and multimedia developer (in <a href='#' target="_blank">BOBA production🔗</a>)</p>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ export default function About() {
                                 <p>graduated from «stroganov russian state university of design and applied arts (book illustration graphics)</p>
                                 <p>graduated from moscow music school (stage lighting design)</p>
                                 <p>working as freelancer</p>
-                                <p>and multimedia developer (in <a href='https://www.gutor.pro/' target="_blank">gutor production🔗</a>)</p>
+                                <p>and multimedia developer (in <a href='#' target="_blank">BOBA production🔗</a>)</p>
                             </div>
                         </div>
                     </div>
