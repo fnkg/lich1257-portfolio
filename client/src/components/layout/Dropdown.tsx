@@ -15,11 +15,18 @@ export default function Dropdown({ links }: DropdownComponentProps) {
           className="px-1.5 border first:border-t-0 border-b-0 last:border-b border-white hover:text-[#00ff00]"
         >
           {link.isExternal ? (
-            <a href={link.href} target="_blank" rel="noopener noreferrer" className="audioMenuCat">
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="audioMenuCat"
+            >
               {link.text}
             </a>
           ) : (
-            <Link href={link.href} className="audioMenuCat">{link.text}</Link>
+            <Link href={link.href} className="audioMenuCat">
+              {link.text}
+            </Link>
           )}
         </li>
       ))}

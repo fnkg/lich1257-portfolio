@@ -20,7 +20,6 @@ export default function AudioMenu() {
         ".audioMenuMain, .audioMenuCat"
       );
       navLinks.forEach((link, i) => {
-        // Only attach if not already set
         if (!link.hasAttribute("data-beeper")) {
           const isMain = link.classList.contains("audioMenuMain");
           const audioId = `beep-${isMain ? "main" : "cat"}${i}`;
@@ -44,10 +43,8 @@ export default function AudioMenu() {
       });
     }
 
-    // Initial attachment
     attachListeners();
 
-    // Observe DOM changes to attach listeners for dynamically rendered dropdown links
     const observer = new MutationObserver(attachListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 

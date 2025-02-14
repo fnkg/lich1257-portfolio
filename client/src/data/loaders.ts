@@ -24,7 +24,7 @@ const homePageQuery = qs.stringify({
   },
 });
 
-export async function getHomePage() {
+export async function getGlobalSettings() {
   const path = "/api/home-page";
   const url = new URL(path, BASE_URL);
   url.search = homePageQuery;

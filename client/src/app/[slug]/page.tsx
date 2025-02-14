@@ -1,5 +1,5 @@
 import { getPageBySlug } from "@/data/loaders";
-import ProjectSlider from "@/components/ProjectSlider";
+import Slider from "@/components/projects/Slider";
 import { notFound } from "next/navigation";
 
 async function loader(slug: string) {
@@ -16,11 +16,11 @@ interface PageProps {
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const cards = await loader(params.slug);
+  const { slug } = await params;
+  const cards = await loader(slug);
   return (
     <main className="relative w-full m-auto">
-      {/* Pass the Strapi “cards” array to your Swiper slider */}
-      <ProjectSlider projects={cards} />
+      <Slider projects={cards} />
     </main>
   );
 }

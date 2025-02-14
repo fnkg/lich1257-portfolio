@@ -9,8 +9,8 @@ import AudioMenu from "../AudioMenu";
 interface HeaderProps {
   data: {
     id: number;
-    link: LinkProps; // e.g. { id: 19, text: "about", href: "/about", isExternal: false }
-    dropdown: DropdownProps[]; // e.g. contacts, projects, etc.
+    link: LinkProps;
+    dropdown: DropdownProps[];
   };
 }
 
@@ -18,15 +18,12 @@ export function Header({ data }: HeaderProps) {
   if (!data) return null;
   const { link, dropdown } = data;
 
-  // Track which dropdown is open (null = none open)
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null
   );
 
-  // Ref to the entire navigation area
   const navRef = useRef<HTMLDivElement>(null);
 
-  // Close the dropdown if user clicks outside navRef
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
@@ -40,7 +37,6 @@ export function Header({ data }: HeaderProps) {
     };
   }, []);
 
-  // Toggle the dropdown for a given index
   const handleDropdownToggle = (idx: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === idx ? null : idx));
   };
@@ -55,7 +51,6 @@ export function Header({ data }: HeaderProps) {
           <AudioMenu />
 
           <li>
-            {/* About Link in the same row */}
             <Link
               href={link.href}
               className="audioMenuMain hover:text-[#00ff00]"
@@ -63,24 +58,16 @@ export function Header({ data }: HeaderProps) {
               {link.text}
             </Link>
           </li>
-          {/* Dropdowns for 'contacts' and 'projects' */}
 
           {dropdown.map((item, idx) => (
             <li key={item.id} className="ml-4">
-              {/* Title (clickable) */}
               <button
                 onClick={() => handleDropdownToggle(idx)}
                 className="audioMenuMain hover:text-[#00ff00] cursor-pointer"
               >
                 {item.text}
               </button>
-
-              {/* Render dropdown if open */}
-              {openDropdownIndex === idx && (
-                // <div className="absolute left-0 mt-2 text-white p-2">
-                <Dropdown links={item.link} />
-                // </div>
-              )}
+              {openDropdownIndex === idx && <Dropdown links={item.link} />}
             </li>
           ))}
         </ul>
