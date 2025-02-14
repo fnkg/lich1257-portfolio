@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import MediaModal from "../../legacy__components/projects/MediaModal";
-import MediaViewer from "../../legacy__components/projects/MediaViewer";
+import { useState } from "react";
+import MediaModal from "./MediaModal";
+import MediaViewer from "./MediaViewer";
 
 import type { ProjectCard } from "@/types";
 
@@ -46,7 +46,9 @@ export default function Gallery({
           {language === "en" ? "ru" : "en"}
         </button>
 
-        <h2 className="p-4 pb-2 text-4xl uppercase font-bold">{project.title}</h2>
+        <h2 className="p-4 pb-2 text-4xl uppercase font-bold">
+          {project.title}
+        </h2>
         <p className="px-4 text-2xl overflow-y-auto">
           {language === "en" ? project.textEn ?? "" : project.textRu ?? ""}
         </p>

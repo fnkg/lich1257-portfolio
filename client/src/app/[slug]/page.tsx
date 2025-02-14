@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug } from "@/data/loaders";
-import Slider from "@/components/projects/Slider";
+import Slider from "@/components/category/Slider";
 
 interface PageProps {
   params: {

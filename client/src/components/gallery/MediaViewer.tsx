@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 interface MediaViewerProps {
-    src: string;
-    type: "video" | "youtube" | "image";
+  src: string;
+  type: "video" | "youtube" | "image";
   onClick?: () => void;
 }
 

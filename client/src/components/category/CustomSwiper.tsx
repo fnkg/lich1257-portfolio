@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 // Импорт компонентов и модулей Swiper
 import { Swiper, SwiperSlide } from "swiper/react";

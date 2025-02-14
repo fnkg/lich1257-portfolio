@@ -1,6 +1,6 @@
 import qs from "qs";
 import { fetchAPI } from "@/utils/fetchApi";
-import { getStrapiURL } from "@/utils/get-strapi-url";
+import { getStrapiURL } from "@/utils/getStrapiUrl";
 
 const BASE_URL = getStrapiURL();
 
@@ -53,5 +53,43 @@ export async function getPageBySlug(slug: string) {
   const path = "/api/categories";
   const url = new URL(path, BASE_URL);
   url.search = pageBySlugQuery(slug);
+  return await fetchAPI(url.href, { method: "GET" });
+}
+
+const galleryBySlug = (slug: string) =>
+  qs.stringify({
+    populate: {
+      categories: {
+        fields: [slug],
+      },
+      content: {
+        on: {
+          "blocks.gallery": {
+            populate: {
+              images: {
+                fields: ["url", "alternativeText"],
+              },
+              videos: {
+                fields: ["url", "alternativeText"],
+              },
+              external: true,
+            },
+          },
+        },
+      },
+    },
+    filters: {
+      categories: {
+        slug: {
+          $eq: slug,
+        },
+      },
+    },
+  });
+
+export async function getGalleryBySlug(slug: string) {
+  const path = "/api/categories";
+  const url = new URL(path, BASE_URL);
+  url.search = galleryBySlug(slug);
   return await fetchAPI(url.href, { method: "GET" });
 }

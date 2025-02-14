@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import CustomSwiper from "./CustomSwiper";
-import Gallery from "./Gallery";
+import CustomSwiper from "@/components/category/CustomSwiper";
+import Gallery from "@/components/gallery/Gallery";
 import "@/styles/slider.css";
 
 import type { ProjectCard } from "@/types";

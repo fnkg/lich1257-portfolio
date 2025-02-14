@@ -39,7 +39,7 @@
 
 .card-hover {
     --size: 100%;
-    --transition-duration: 800ms;
+    --transition-duration: 0.3s;
     --transition-easing: ease-out;
     width: var(--size);
     height: var(--size);
@@ -63,7 +63,7 @@
     height: 100%;
     top: 0;
     left: -125%;
-    transform: skew(45deg);
+    transform: skew(35deg);
     position: absolute;
     transition: left var(--transition-duration) var(--transition-easing);
   }
