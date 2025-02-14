@@ -1,80 +1,87 @@
-import { useState } from 'react';
-// import MediaModal from './MediaModal';
-// import MediaViewer from './MediaViewer';
+"use client";
 
-interface Project {
-    title: string;
-    textEn: string;
-    textRu: string;
-    media: { src: string; type: "video" | "youtube" | "image" }[];
-}
+import React, { useState } from "react";
+import MediaModal from "../../legacy__components/projects/MediaModal";
+import MediaViewer from "../../legacy__components/projects/MediaViewer";
+
+import type { ProjectCard } from "@/types";
 
 interface GalleryProps {
-    project: Project;
-    closeGallery: () => void;
-    language: string;
-    toggleLanguage: () => void;
+  project: ProjectCard;
+  closeGallery: () => void;
+  language: "en" | "ru";
+  toggleLanguage: () => void;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ project, closeGallery, language, toggleLanguage }) => {
-    const [selectedMedia, setSelectedMedia] = useState<{ src: string | null; type: "video" | "youtube" | "image" | null }>({ src: null, type: null });
+export default function Gallery({
+  project,
+  closeGallery,
+  language,
+  toggleLanguage,
+}: GalleryProps) {
+  const [selectedMedia, setSelectedMedia] = useState<{
+    src: string | null;
+    type: "video" | "youtube" | "image" | null;
+  }>({ src: null, type: null });
 
-    interface Media {
-        src: string;
-        type: "video" | "youtube" | "image";
-    }
+  const handleMediaClick = (
+    src: string,
+    type: "video" | "youtube" | "image"
+  ) => {
+    setSelectedMedia({ src, type });
+  };
 
-    interface SelectedMedia {
-        src: string | null;
-        type: "video" | "youtube" | "image" | null;
-    }
+  const handleCloseModal = () => {
+    setSelectedMedia({ src: null, type: null });
+  };
 
-    const handleMediaClick = (src: Media['src'], type: Media['type']) => {
-        setSelectedMedia({ src, type });
-    };
+  return (
+    <section className="fixed inset-0 z-30 flex">
+      {/* Левая панель (текст + язык) */}
+      <article className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
+        <button
+          className="p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
+          onClick={toggleLanguage}
+        >
+          {language === "en" ? "ru" : "en"}
+        </button>
 
-    const handleCloseModal = () => {
-        setSelectedMedia({ src: null, type: null });
-    };
+        <h2 className="p-4 pb-2 text-4xl uppercase font-bold">{project.title}</h2>
+        <p className="px-4 text-2xl overflow-y-auto">
+          {language === "en" ? project.textEn ?? "" : project.textRu ?? ""}
+        </p>
+      </article>
 
-    return (
-        <section className="fixed inset-0 z-30 flex">
-            <article className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
-                <button
-                    className="p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
-                    onClick={toggleLanguage}
-                >
-                    {language === 'en' ? 'ru' : 'en'}
-                </button>
-                <h2 className="p-4 pb-2 text-4xl uppercase font-bold">{project.title}</h2>
-                <p className=" px-4 text-2xl overflow-y-auto">
-                    {language === 'en' ? project.textEn : project.textRu}
-                </p>
-            </article>
-            <div className="relative flex flex-col w-2/3 p-4 bg-black border">
-                <button
-                    className="relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
-                    onClick={closeGallery}
-                >
-                    ✕
-                </button>
-                <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded-sm">
-                    {project.media.map((mediaItem, index) => (
-                        <div
-                            key={index}
-                            className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
-                            onClick={() => handleMediaClick(mediaItem.src, mediaItem.type)}
-                        >
-                            <MediaViewer type={mediaItem.type} src={mediaItem.src} />
-                            <div className="absolute inset-0 w-inherit h-inherit"></div>
-                        </div>
-                    ))}
-                </div>
+      {/* Правая панель (медиа) */}
+      <div className="relative flex flex-col w-2/3 p-4 bg-black border">
+        <button
+          className="relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
+          onClick={closeGallery}
+        >
+          ✕
+        </button>
+        <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded-sm">
+          {project.media?.map((mediaItem, index) => (
+            <div
+              key={index}
+              className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
+              onClick={() => handleMediaClick(mediaItem.src, mediaItem.type)}
+            >
+              <MediaViewer type={mediaItem.type} src={mediaItem.src} />
+              <div className="absolute inset-0 w-inherit h-inherit" />
             </div>
-            {selectedMedia.src && selectedMedia.type && (
-                <MediaModal src={selectedMedia.src} type={selectedMedia.type} onClose={handleCloseModal} />
-            )}
-        </section>
-    );
-};
-export default Gallery;
+          ))}
+        </div>
+      </div>
+
+      {/* Модалка для просмотра отдельного медиа */}
+      {selectedMedia.src && selectedMedia.type && (
+        <MediaModal
+          src={selectedMedia.src}
+          type={selectedMedia.type}
+          onClose={handleCloseModal}
+        />
+      )}
+    </section>
+  );
+}

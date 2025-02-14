@@ -1,43 +1,37 @@
 "use client";
-import { useState, useRef } from "react";
-import useSwiper from "@/utils/useSwiper";
+
+import React, { useState } from "react";
+import CustomSwiper from "./CustomSwiper";
 import Gallery from "./Gallery";
 import "@/styles/slider.css";
 
-interface ProjectImage {
-  id: number;
-  url: string;
-  alternativeText?: string | null;
+import type { ProjectCard } from "@/types";
+
+interface SliderProps {
+  cards: ProjectCard[];
 }
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image?: ProjectImage;
-}
-
-interface ProjectSliderProps {
-  projects: Project[];
-}
-
-export default function Slider({ projects }: ProjectSliderProps) {
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null);
-  const [language, setLanguage] = useState("en");
+export default function Slider({ cards }: SliderProps) {
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState<
+    number | null
+  >(null);
+  const [language, setLanguage] = useState<"en" | "ru">("en");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  // Track hover state
-  const [hoverState, setHoverState] = useState({
+  const [hoverState, setHoverState] = useState<{
+    isHovering: boolean;
+    pointerPosition: { x: number; y: number };
+    hoveredProject: ProjectCard | null;
+  }>({
     isHovering: false,
     pointerPosition: { x: 0, y: 0 },
-    hoveredProject: null as Project | null,
+    hoveredProject: null,
   });
 
-  // Swiper reference
-  const swiperRef = useRef(null);
-
-  // Handle pointer events for hover
-  const handlePointerMove = (e: React.PointerEvent, project: Project) => {
+  const handlePointerMove = (
+    e: React.PointerEvent<HTMLDivElement>,
+    project: ProjectCard
+  ) => {
     setHoverState((prev) => ({
       ...prev,
       pointerPosition: { x: e.clientX, y: e.clientY },
@@ -45,7 +39,7 @@ export default function Slider({ projects }: ProjectSliderProps) {
     }));
   };
 
-  const handlePointerEnter = (project: Project) => {
+  const handlePointerEnter = (project: ProjectCard) => {
     setHoverState((prev) => ({
       ...prev,
       isHovering: true,
@@ -75,36 +69,18 @@ export default function Slider({ projects }: ProjectSliderProps) {
     setLanguage((cur) => (cur === "en" ? "ru" : "en"));
   };
 
-  useSwiper(swiperRef, selectedProjectIndex, isGalleryOpen, closeGallery);
-
   return (
     <>
-      <swiper-container ref={swiperRef} init="false" class="swiper-container">
-        {projects.map((project, index) => {
-          const bgImageUrl = project.image?.url
-            ? "http://localhost:1337" + project.image.url
-            : "/fallback.jpg";
-
-          return (
-            <swiper-slide key={project.id} class="swiper-slide">
-              <div
-                className="project-card relative w-[600px] h-[600px] max-w-[250px] max-h-[400px]
-                           2xl:max-w-[700px] 2xl:max-h-[700px] xl:max-w-[600px] xl:max-h-[600px]
-                           lg:max-w-[500px] lg:max-h-[500px] md:max-w-[400px] md:max-h-[400px]
-                           sm:max-w-[300px] sm:max-h-[300px]
-                           bg-cover bg-center bg-no-repeat cursor-pointer group"
-                style={{ backgroundImage: `url(${bgImageUrl})` }}
-                onClick={() => openGallery(index)}
-                onPointerEnter={() => handlePointerEnter(project)}
-                onPointerLeave={handlePointerLeave}
-                onPointerMove={(e) => handlePointerMove(e, project)}
-              >
-                <div className="card-hover"></div>
-              </div>
-            </swiper-slide>
-          );
-        })}
-      </swiper-container>
+      <CustomSwiper
+        cards={cards}
+        selectedProjectIndex={selectedProjectIndex}
+        isGalleryOpen={isGalleryOpen}
+        closeGallery={closeGallery}
+        openGallery={openGallery}
+        handlePointerEnter={handlePointerEnter}
+        handlePointerLeave={handlePointerLeave}
+        handlePointerMove={handlePointerMove}
+      />
 
       {hoverState.isHovering && hoverState.hoveredProject && (
         <h2
@@ -118,10 +94,9 @@ export default function Slider({ projects }: ProjectSliderProps) {
         </h2>
       )}
 
-      {/* Project Gallery Modal */}
       {isGalleryOpen && selectedProjectIndex !== null && (
         <Gallery
-          project={projects[selectedProjectIndex]}
+          project={cards[selectedProjectIndex]}
           closeGallery={closeGallery}
           language={language}
           toggleLanguage={toggleLanguage}
