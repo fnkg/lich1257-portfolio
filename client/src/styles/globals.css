@@ -36,7 +36,7 @@ body {
   width: 100vw;
   height: 100vh;
   color: rgb(var(--foreground-rgb));
-  background: url('/assets/bg.png') no-repeat center center fixed;
+  background: url("/assets/bg.png") no-repeat center center fixed;
   background-size: cover;
   /* background-color: #555; */
 }
@@ -50,8 +50,6 @@ body {
   object-fit: cover;
   z-index: -1;
 }
-
-
 
 /* Debug Apative */
 /* sm */
@@ -76,7 +74,7 @@ body {
 }
 
 /* 2xl */
-@media only screen and (min-width: 1280px) and (max-width:1536px) {
+@media only screen and (min-width: 1280px) and (max-width: 1536px) {
   body {
     background-color: #e01ab5;
   }

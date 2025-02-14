@@ -28,20 +28,22 @@ export default async function RootLayout({
   const data = await loader();
   const background = data.background;
 
-  console.log(background.url);
-
   return (
     <html lang="en">
       <body className={freepixel.className}>
         <Header data={data.header} />
         {children}
 
-        <video autoPlay muted loop className="backgroundVideo">
-          <source
-            src={`http://localhost:1337${background.url}`}
-            type="video/mp4"
-          />
-        </video>
+        {background ? (
+          <video autoPlay muted loop className="backgroundVideo">
+            <source
+              src={`http://localhost:1337${background.url}`}
+              type="video/mp4"
+            />
+          </video>
+        ) : (
+          <></>
+        )}
       </body>
     </html>
   );

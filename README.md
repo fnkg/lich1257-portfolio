@@ -1,9 +1,8 @@
-
 ### Структура проекта
 
 #### Клиент
 
-*Next.js v15.1.7, TypeScript, Swiper.js v11.2.3, Tailwind.css v4.0.6*
+_Next.js v15.1.7, TypeScript, Swiper.js v11.2.3, Tailwind.css v4.0.6_
 
 - `src/app/layout.tsx` - общий ui
 - `src/app/page.tsx` - входная точка в приложение
@@ -24,7 +23,7 @@
 - `src/styles/global.css` - глобальные стили
 - `src/styles/slider.css` - стили для слайдера проектов
 - `src/utils/fetchApi.ts` - фетчер
-- `src/utils/getStrapiUrl.ts` - получение адреса API
+- `src/utils/getUrl.ts` - функции для формирования урлов
 - `src/utils/randomText.ts` - эффект для постепенного появления текста
 - `src/fonts.ts` - шрифты
 - `src/types.ts` - типы
@@ -32,6 +31,6 @@
 
 #### Сервер
 
-*Strapi CMS v5, PostgreSql v*
+_Strapi CMS v5, PostgreSql v15_
 
 requirement node version ">=18.0.0 <=22.x.x"

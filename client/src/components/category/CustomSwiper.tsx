@@ -15,25 +15,19 @@ import type { ProjectCard, CloseGallery } from "@/types";
 
 interface CustomSwiperProps {
   cards: ProjectCard[];
-
-  // Управление при открытии/закрытии галереи
-  selectedProjectIndex: number | null;
   isGalleryOpen: boolean;
   closeGallery: CloseGallery;
-
-  // Обработчики для карточек
   openGallery: (index: number) => void;
   handlePointerEnter: (project: ProjectCard) => void;
   handlePointerLeave: () => void;
   handlePointerMove: (
     e: React.PointerEvent<HTMLDivElement>,
-    project: ProjectCard
+    project: ProjectCard,
   ) => void;
 }
 
 export default function CustomSwiper({
   cards,
-  selectedProjectIndex,
   isGalleryOpen,
   closeGallery,
   openGallery,
@@ -41,42 +35,34 @@ export default function CustomSwiper({
   handlePointerLeave,
   handlePointerMove,
 }: CustomSwiperProps) {
-  // Храним экземпляр свайпера
   const swiperRef = useRef<SwiperCore | null>(null);
 
-  // Обработка запуска/остановки autoplay + Esc
   useEffect(() => {
-    // При нажатии Escape — закрыть галерею
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeGallery();
       }
     };
 
-    // Добавляем или убираем слушатель
-    if (selectedProjectIndex !== null || isGalleryOpen) {
+    if (isGalleryOpen) {
       document.addEventListener("keydown", handleKeyDown);
-      // Если что-то выбрано, останавливаем автоплей
       swiperRef.current?.autoplay?.stop();
     } else {
       document.removeEventListener("keydown", handleKeyDown);
-      // Если ничего не выбрано, запускаем автоплей
       swiperRef.current?.autoplay?.start();
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedProjectIndex, isGalleryOpen, closeGallery]);
+  }, [isGalleryOpen, closeGallery]);
 
   return (
     <Swiper
-      // Модули
       modules={[Autoplay, Mousewheel, FreeMode]}
       onSwiper={(swiper) => {
-        swiperRef.current = swiper; // сохраняем инстанс
+        swiperRef.current = swiper;
       }}
-      // Все параметры, которые вы раньше указывали
       slidesPerView={3}
       loop={true}
       freeMode={{

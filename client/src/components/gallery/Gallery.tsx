@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import MediaModal from "./MediaModal";
-import MediaViewer from "./MediaViewer";
-
-import type { ProjectCard } from "@/types";
+import { getBaseUrl } from "@/utils/getUrl";
 
 interface GalleryProps {
-  project: ProjectCard;
+  project: any;
   closeGallery: () => void;
   language: "en" | "ru";
   toggleLanguage: () => void;
@@ -19,71 +17,111 @@ export default function Gallery({
   language,
   toggleLanguage,
 }: GalleryProps) {
-  const [selectedMedia, setSelectedMedia] = useState<{
-    src: string | null;
-    type: "video" | "youtube" | "image" | null;
-  }>({ src: null, type: null });
+  console.log("project: ", project);
 
-  const handleMediaClick = (
-    src: string,
-    type: "video" | "youtube" | "image"
-  ) => {
-    setSelectedMedia({ src, type });
-  };
+  // 1) Ищем блок text-content
+  const textContentBlock = project.content.find(
+    (block: any) => block.__component === "blocks.text-content",
+  );
+  // Текст на выбранном языке:
+  const text = textContentBlock?.[language] || "";
 
-  const handleCloseModal = () => {
-    setSelectedMedia({ src: null, type: null });
-  };
+  // 2) Ищем блок gallery
+  const galleryBlock = project.content.find(
+    (block: any) => block.__component === "blocks.gallery",
+  );
+  const images = galleryBlock?.images || [];
+  const videos = galleryBlock?.videos || [];
+  const external = galleryBlock?.external || [];
+
+  const [activeMedia, setActiveMedia] = useState<{
+    src: string;
+    type: "image" | "video" | "external";
+  } | null>(null);
+
+  // Обработчик клика по миниатюре
+  function openMedia(src: string, type: "image" | "video" | "external") {
+    setActiveMedia({ src, type });
+  }
+
+  function closeModal() {
+    setActiveMedia(null);
+  }
 
   return (
-    <section className="fixed inset-0 z-30 flex">
-      {/* Левая панель (текст + язык) */}
-      <article className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
+    <div className="fixed inset-0 z-30 flex">
+      {/* Левая часть (текст) */}
+      <section className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
         <button
-          className="p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
           onClick={toggleLanguage}
+          className="audioMenuMain p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border cursor-pointer"
         >
           {language === "en" ? "ru" : "en"}
         </button>
-
         <h2 className="p-4 pb-2 text-4xl uppercase font-bold">
           {project.title}
         </h2>
-        <p className="px-4 text-2xl overflow-y-auto">
-          {language === "en" ? project.textEn ?? "" : project.textRu ?? ""}
-        </p>
-      </article>
+        <p className="px-4 text-2xl overflow-y-auto">{text}</p>
+      </section>
 
-      {/* Правая панель (медиа) */}
-      <div className="relative flex flex-col w-2/3 p-4 bg-black border">
+      {/* Правая часть (медиа) */}
+      <section className="relative flex flex-col w-2/3 p-4 bg-black border">
         <button
-          className="relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border"
           onClick={closeGallery}
+          className="audioMenuMain relative z-10 p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border cursor-pointer"
         >
           ✕
         </button>
         <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded-sm">
-          {project.media?.map((mediaItem, index) => (
+          {images.map((img: any, index: number) => (
             <div
-              key={index}
+              key={img.id || index}
               className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
-              onClick={() => handleMediaClick(mediaItem.src, mediaItem.type)}
+              onClick={() => openMedia(img.url, "image")}
             >
-              <MediaViewer type={mediaItem.type} src={mediaItem.src} />
-              <div className="absolute inset-0 w-inherit h-inherit" />
+              {/* Thumb */}
+              <img
+                src={getBaseUrl(img.url)}
+                alt={img.alternativeText || "image"}
+                className="object-cover w-full"
+              />
             </div>
           ))}
-        </div>
-      </div>
 
-      {/* Модалка для просмотра отдельного медиа */}
-      {selectedMedia.src && selectedMedia.type && (
+          {videos && videos.length > 0 ? (
+            videos.map((vid: any, index: number) => (
+              <div key={vid.id || index} className="mt-2">
+                <button onClick={() => openMedia(getBaseUrl(vid.url), "video")}>
+                  {vid.url}
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No local videos</p>
+          )}
+
+          {external && external.length > 0 ? (
+            external.map((link: string, index: number) => (
+              <div key={index} className="mt-2">
+                <button
+                  onClick={() => openMedia(getBaseUrl(link), "external")}
+                ></button>
+              </div>
+            ))
+          ) : (
+            <p>No external links</p>
+          )}
+        </div>
+      </section>
+
+      {/* Модальное окно для выбранного медиа */}
+      {activeMedia && (
         <MediaModal
-          src={selectedMedia.src}
-          type={selectedMedia.type}
-          onClose={handleCloseModal}
+          src={activeMedia.src}
+          type={activeMedia.type}
+          onClose={closeModal}
         />
       )}
-    </section>
+    </div>
   );
 }

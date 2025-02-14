@@ -19,7 +19,7 @@ export function Header({ data }: HeaderProps) {
   const { link, dropdown } = data;
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
-    null
+    null,
   );
 
   const navRef = useRef<HTMLDivElement>(null);

@@ -1,7 +1,7 @@
 export function randomText(
   text: string,
   setText: (text: string) => void,
-  speed: number
+  speed: number,
 ) {
   let i = 0;
   const chars = text.split("");

@@ -9,12 +9,11 @@ import type { ProjectCard } from "@/types";
 
 interface SliderProps {
   cards: ProjectCard[];
+  galleryData: any[];
 }
 
-export default function Slider({ cards }: SliderProps) {
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState<
-    number | null
-  >(null);
+export default function Slider({ cards, galleryData }: SliderProps) {
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [language, setLanguage] = useState<"en" | "ru">("en");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
@@ -30,7 +29,7 @@ export default function Slider({ cards }: SliderProps) {
 
   const handlePointerMove = (
     e: React.PointerEvent<HTMLDivElement>,
-    project: ProjectCard
+    project: ProjectCard,
   ) => {
     setHoverState((prev) => ({
       ...prev,
@@ -57,12 +56,12 @@ export default function Slider({ cards }: SliderProps) {
 
   const openGallery = (index: number) => {
     setIsGalleryOpen(true);
-    setSelectedProjectIndex(index);
+    setSelectedProject(cards[index].title);
   };
 
   const closeGallery = () => {
     setIsGalleryOpen(false);
-    setSelectedProjectIndex(null);
+    setSelectedProject(null);
   };
 
   const toggleLanguage = () => {
@@ -73,7 +72,6 @@ export default function Slider({ cards }: SliderProps) {
     <>
       <CustomSwiper
         cards={cards}
-        selectedProjectIndex={selectedProjectIndex}
         isGalleryOpen={isGalleryOpen}
         closeGallery={closeGallery}
         openGallery={openGallery}
@@ -94,9 +92,9 @@ export default function Slider({ cards }: SliderProps) {
         </h2>
       )}
 
-      {isGalleryOpen && selectedProjectIndex !== null && (
+      {isGalleryOpen && selectedProject !== null && (
         <Gallery
-          project={cards[selectedProjectIndex]}
+          project={galleryData.find((item) => item.title === selectedProject)}
           closeGallery={closeGallery}
           language={language}
           toggleLanguage={toggleLanguage}

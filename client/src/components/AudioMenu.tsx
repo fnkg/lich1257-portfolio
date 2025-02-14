@@ -8,7 +8,7 @@ export default function AudioMenu() {
       const audioId = target.dataset.beeper;
       if (!audioId) return;
       const audioEl = document.getElementById(
-        audioId
+        audioId,
       ) as HTMLAudioElement | null;
       if (audioEl) {
         audioEl.play();
@@ -17,7 +17,7 @@ export default function AudioMenu() {
 
     function attachListeners() {
       const navLinks = document.querySelectorAll(
-        ".audioMenuMain, .audioMenuCat"
+        ".audioMenuMain, .audioMenuCat",
       );
       navLinks.forEach((link, i) => {
         if (!link.hasAttribute("data-beeper")) {
@@ -51,7 +51,7 @@ export default function AudioMenu() {
     return () => {
       observer.disconnect();
       const navLinks = document.querySelectorAll(
-        ".audioMenuMain, .audioMenuCat"
+        ".audioMenuMain, .audioMenuCat",
       );
       navLinks.forEach((link) => {
         link.removeEventListener("pointerenter", handlePointerEnter);
