@@ -1,27 +1,58 @@
 {
   "compilerOptions": {
+    // Target modern JS so that Next can handle bundling optimizations
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    // Include DOM, DOM iterable, ESNext libs
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    // Allow JavaScript files if you have any .js
     "allowJs": true,
+    // Speed up builds by skipping lib type checks
     "skipLibCheck": true,
+    // Enable TypeScript’s strict type‐checking
     "strict": true,
+    // Avoid emitting compiled files (Next handles that)
     "noEmit": true,
+    // Common interop for ES modules and CommonJS
     "esModuleInterop": true,
+    // For Next 13+, "module" and "moduleResolution" often set to ESNext & bundler
     "module": "esnext",
     "moduleResolution": "bundler",
+    // Allow importing JSON modules
     "resolveJsonModule": true,
+    // Ensure each file is treated as isolated
     "isolatedModules": true,
+    // Let Next’s Babel transform the JSX
     "jsx": "preserve",
+    // Speed up incremental builds
     "incremental": true,
+    // Next.js plugin
     "plugins": [
       {
         "name": "next"
       }
     ],
+    // (Optional) custom path aliases
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["./**/*.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "dist", "lib"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./**/*.d.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib",
+    ".next/types"
+  ]
 }

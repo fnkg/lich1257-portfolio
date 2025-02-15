@@ -3,14 +3,8 @@ import { getPageBySlug, getGalleryBySlug } from "@/data/loaders";
 import Slider from "@/components/category/Slider";
 import { ProjectCard, ProjectGallery } from "@/types";
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
 async function loader(
-  slug: string,
+  slug: string
 ): Promise<{ cards: ProjectCard[]; galleryData: ProjectGallery[] }> {
   const page = await getPageBySlug(slug);
   const gallery = await getGalleryBySlug(slug);
@@ -25,7 +19,11 @@ async function loader(
   };
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = await params;
   const { cards, galleryData } = await loader(slug);
 
