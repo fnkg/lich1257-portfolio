@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { getBaseUrl } from "@/utils/getUrl";
+import { getBaseUrl, getYouTubeThumbnail } from "@/utils/getUrl";
 import MediaModal from "./MediaModal";
 
 import type {
@@ -111,13 +111,7 @@ export default function Gallery({
           ))}
 
           {external.map((link: ExternalLink, index: number) => {
-            const youtubeIdMatch = link.href.match(
-              /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/,
-            );
-            const youtubeThumbnail = youtubeIdMatch
-              ? `https://img.youtube.com/vi/${youtubeIdMatch[1]}/hqdefault.jpg`
-              : null;
-
+            const youtubeThumbnail = getYouTubeThumbnail(link.href);
             return (
               <div key={index} className="mt-2">
                 <button

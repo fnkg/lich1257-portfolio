@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getBaseUrl } from "@/utils/getUrl";
+import { getBaseUrl, getYouTubeEmbedUrl } from "@/utils/getUrl";
 
 interface MediaViewerProps {
   src: string;
@@ -17,10 +17,11 @@ export default function MediaViewer({ type, src }: MediaViewerProps) {
         </video>
       );
     case "external":
+      const embedUrl = getYouTubeEmbedUrl(src);
       return (
         <iframe
-          src={fullURL}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          src={embedUrl}
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture, fullscreen"
           allowFullScreen
           title="project media via youtube"
           className="w-full h-full"
