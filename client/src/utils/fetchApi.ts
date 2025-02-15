@@ -13,24 +13,21 @@ interface FetchAPIOptions {
 export async function fetchAPI(url: string, options: FetchAPIOptions) {
   const { method, authToken, body, next } = options;
 
-  const headers: RequestInit & { next?: NextFetchRequestConfig } = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(authToken && { Authorization: `Bearer ${authToken}` }),
-    },
-    ...(body && { body: JSON.stringify(body) }),
-    ...(next && { next }),
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(authToken && { Authorization: `Bearer ${authToken}` }),
   };
 
   try {
-    const response = await fetch(url, headers);
+    const response = await fetch(url, {
+      method,
+      headers,
+      ...(body && { body: JSON.stringify(body) }),
+      ...(next && { next }),
+    });
+
     const contentType = response.headers.get("content-type");
-    if (
-      contentType &&
-      contentType.includes("application/json") &&
-      response.ok
-    ) {
+    if (contentType?.includes("application/json") && response.ok) {
       return await response.json();
     } else {
       return { status: response.status, statusText: response.statusText };

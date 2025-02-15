@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import "@/styles/globals.css";
+import { notFound } from "next/navigation";
 import { freepixel } from "@/fonts";
-
 import { Header } from "@/components/layout/Header";
 import { getGlobalSettings } from "@/data/loaders";
-import { notFound } from "next/navigation";
+import "@/styles/globals.css";
+
 
 async function loader() {
   const data = await getGlobalSettings();

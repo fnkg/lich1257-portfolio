@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug, getGalleryBySlug } from "@/data/loaders";
 import Slider from "@/components/category/Slider";
+import { ProjectCard } from "@/types";
 
 interface PageProps {
   params: {
@@ -8,9 +9,12 @@ interface PageProps {
   };
 }
 
-async function loader(slug: string) {
+async function loader(
+  slug: string
+): Promise<{ cards: ProjectCard[]; galleryData: any[] }> {
   const page = await getPageBySlug(slug);
   const gallery = await getGalleryBySlug(slug);
+
   if (!page.data.length) {
     notFound();
   }
@@ -22,7 +26,7 @@ async function loader(slug: string) {
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const { cards, galleryData } = await loader(slug);
 
   return (

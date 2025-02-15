@@ -3,7 +3,7 @@ export function getStrapiURL() {
 }
 
 export function getBaseUrl(url: string): string {
-  const baseUrl = process.env.STRAPI_API_URL || "http://localhost:1337";
+  const baseUrl = process.env.STRAPI_API_URL ?? "http://localhost:1337";
   return `${baseUrl}${url}`;
 }
 

@@ -17,7 +17,6 @@ export default function Gallery({
   language,
   toggleLanguage,
 }: GalleryProps) {
-  console.log("project: ", project);
 
   // 1) Ищем блок text-content
   const textContentBlock = project.content.find(
@@ -56,7 +55,7 @@ export default function Gallery({
           onClick={toggleLanguage}
           className="audioMenuMain p-1 text-2xl hover:text-[#00ff00] hover:font-bold rounded-sm border cursor-pointer"
         >
-          {language === "en" ? "ru" : "en"}
+          {language === "en" ? "en" : "ru"}
         </button>
         <h2 className="p-4 pb-2 text-4xl uppercase font-bold">
           {project.title}
@@ -92,7 +91,12 @@ export default function Gallery({
             videos.map((vid: any, index: number) => (
               <div key={vid.id || index} className="mt-2">
                 <button onClick={() => openMedia(getBaseUrl(vid.url), "video")}>
-                  {vid.url}
+                  <video autoPlay muted loop className="w-150 h-150">
+                    <source
+                      src={getBaseUrl(vid.url)}
+                      type="video/mp4"
+                    />
+                  </video>
                 </button>
               </div>
             ))
