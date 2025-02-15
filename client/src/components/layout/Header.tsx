@@ -47,7 +47,7 @@ export function Header({ data }: HeaderProps) {
         ref={navRef}
         className="relative w-full text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl"
       >
-        <ul className="flex flex-row justify-center md:justify-start w-full mt-1.5 md:mt-3.5 py-1.5 md:first:pl-3.5 border-y border-white">
+        <ul className="flex flex-row justify-center md:justify-start w-full mt-1.5 md:mt-3.5 py-1.5 md:first:pl-3.5 border-y border-[#c8cfc9]">
           <AudioMenu />
 
           <li>

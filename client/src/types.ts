@@ -1,6 +1,25 @@
 import type { RefObject } from "react";
 import type { SwiperContainer } from "swiper/element/bundle";
 
+/** ===== UNION ===== */
+export type MediaType = "image" | "video" | "external";
+export type Local = "en" | "ru";
+
+/** ===== COMMON TYPES ===== */
+export type SwiperRef = RefObject<SwiperContainer | null>;
+
+/** ===== IMAGE TYPES ===== */
+export interface Image {
+  alternativeText: string | null;
+  id: number;
+  url: string;
+}
+
+export interface ImageProps extends Image {
+  documentId: string;
+}
+
+/** ===== LINK TYPES ===== */
 export interface LinkProps {
   id: number;
   text: string;
@@ -8,33 +27,41 @@ export interface LinkProps {
   isExternal: boolean;
 }
 
+export type ExternalLink = {
+  id: number;
+  href: string;
+  isExternal: boolean;
+  text: string;
+};
+
 export interface DropdownProps {
   id: number;
   text: string;
   link: LinkProps[];
 }
 
-export interface ImageProps {
-  id: number;
-  documentId: string;
-  url: string;
-  alternativeText: string | null;
-}
-
-export interface ProjectImage {
-  id: number;
-  url: string;
-  alternativeText?: string | null;
-}
+/** ===== PROJECT TYPES ===== */
+export type DynamicComponent = {
+  __component: string;
+  [key: string]: any;
+};
 
 export interface ProjectCard {
   id: number;
+  image?: Image;
   title: string;
-  description?: string;
-  image?: ProjectImage;
-  slug?: any;
 }
 
-export type SwiperRef = RefObject<SwiperContainer | null>;
+export interface ProjectGallery extends ProjectCard {
+  content: DynamicComponent[];
+  description: string | null;
+  id: number;
+  title: string;
+}
 
-export type CloseGallery = () => void;
+export interface Project {
+  content: DynamicComponent[] | null;
+  description: string | null;
+  id: number;
+  title: string;
+}

@@ -5,16 +5,17 @@ import CustomSwiper from "@/components/category/CustomSwiper";
 import Gallery from "@/components/gallery/Gallery";
 import "@/styles/slider.css";
 
-import type { ProjectCard } from "@/types";
+import type { ProjectCard, ProjectGallery, Local } from "@/types";
+import { fallbackProject } from "@/utils/fallbacks";
 
 interface SliderProps {
   cards: ProjectCard[];
-  galleryData: any[];
+  galleryData: ProjectGallery[];
 }
 
 export default function Slider({ cards, galleryData }: SliderProps) {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [language, setLanguage] = useState<"en" | "ru">("en");
+  const [language, setLanguage] = useState<Local>("en");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   const [hoverState, setHoverState] = useState<{
@@ -94,7 +95,10 @@ export default function Slider({ cards, galleryData }: SliderProps) {
 
       {isGalleryOpen && selectedProject !== null && (
         <Gallery
-          project={galleryData.find((item) => item.title === selectedProject)}
+          project={
+            galleryData.find((item) => item.title === selectedProject) ??
+            fallbackProject
+          }
           closeGallery={closeGallery}
           language={language}
           toggleLanguage={toggleLanguage}

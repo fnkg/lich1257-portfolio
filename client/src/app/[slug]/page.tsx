@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug, getGalleryBySlug } from "@/data/loaders";
 import Slider from "@/components/category/Slider";
-import { ProjectCard } from "@/types";
+import { ProjectCard, ProjectGallery } from "@/types";
 
 interface PageProps {
   params: {
@@ -10,8 +10,8 @@ interface PageProps {
 }
 
 async function loader(
-  slug: string
-): Promise<{ cards: ProjectCard[]; galleryData: any[] }> {
+  slug: string,
+): Promise<{ cards: ProjectCard[]; galleryData: ProjectGallery[] }> {
   const page = await getPageBySlug(slug);
   const gallery = await getGalleryBySlug(slug);
 

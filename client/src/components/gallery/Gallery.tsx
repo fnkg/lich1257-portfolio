@@ -1,45 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import MediaModal from "./MediaModal";
+
 import { getBaseUrl } from "@/utils/getUrl";
+import MediaModal from "./MediaModal";
+
+import type {
+  ExternalLink,
+  MediaType,
+  Project,
+  DynamicComponent,
+  Image,
+  Local,
+} from "@/types";
 
 interface GalleryProps {
-  project: any;
+  project: Project;
+  language: Local;
   closeGallery: () => void;
-  language: "en" | "ru";
   toggleLanguage: () => void;
 }
 
 export default function Gallery({
   project,
-  closeGallery,
   language,
+  closeGallery,
   toggleLanguage,
 }: GalleryProps) {
+  if (!project.content) {
+    return null;
+  }
 
-  // 1) Ищем блок text-content
   const textContentBlock = project.content.find(
-    (block: any) => block.__component === "blocks.text-content",
+    (block: DynamicComponent) => block.__component === "blocks.text-content",
   );
-  // Текст на выбранном языке:
-  const text = textContentBlock?.[language] || "";
+  const text = textContentBlock?.[language] ?? "";
 
-  // 2) Ищем блок gallery
   const galleryBlock = project.content.find(
-    (block: any) => block.__component === "blocks.gallery",
+    (block: DynamicComponent) => block.__component === "blocks.gallery",
   );
-  const images = galleryBlock?.images || [];
-  const videos = galleryBlock?.videos || [];
-  const external = galleryBlock?.external || [];
+  const images = galleryBlock?.images ?? [];
+  const videos = galleryBlock?.videos ?? [];
+  const external = galleryBlock?.external ?? [];
 
   const [activeMedia, setActiveMedia] = useState<{
     src: string;
-    type: "image" | "video" | "external";
+    type: MediaType;
   } | null>(null);
 
-  // Обработчик клика по миниатюре
-  function openMedia(src: string, type: "image" | "video" | "external") {
+  function openMedia(src: string, type: MediaType) {
     setActiveMedia({ src, type });
   }
 
@@ -72,13 +81,12 @@ export default function Gallery({
           ✕
         </button>
         <div className="grid grid-cols-2 gap-4 mt-4 px-4 pt-10 border overflow-y-auto rounded-sm">
-          {images.map((img: any, index: number) => (
+          {images.map((img: Image, index: number) => (
             <div
               key={img.id || index}
               className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
               onClick={() => openMedia(img.url, "image")}
             >
-              {/* Thumb */}
               <img
                 src={getBaseUrl(img.url)}
                 alt={img.alternativeText || "image"}
@@ -87,34 +95,48 @@ export default function Gallery({
             </div>
           ))}
 
-          {videos && videos.length > 0 ? (
-            videos.map((vid: any, index: number) => (
-              <div key={vid.id || index} className="mt-2">
-                <button onClick={() => openMedia(getBaseUrl(vid.url), "video")}>
-                  <video autoPlay muted loop className="w-150 h-150">
-                    <source
-                      src={getBaseUrl(vid.url)}
-                      type="video/mp4"
-                    />
-                  </video>
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>No local videos</p>
-          )}
+          {videos.map((vid: Image, index: number) => (
+            <div key={vid.id || index} className="mt-2">
+              <button onClick={() => openMedia(getBaseUrl(vid.url), "video")}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  className="w-150 h-150 cursor-pointer"
+                >
+                  <source src={getBaseUrl(vid.url)} type="video/mp4" />
+                </video>
+              </button>
+            </div>
+          ))}
 
-          {external && external.length > 0 ? (
-            external.map((link: string, index: number) => (
+          {external.map((link: ExternalLink, index: number) => {
+            const youtubeIdMatch = link.href.match(
+              /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/,
+            );
+            const youtubeThumbnail = youtubeIdMatch
+              ? `https://img.youtube.com/vi/${youtubeIdMatch[1]}/hqdefault.jpg`
+              : null;
+
+            return (
               <div key={index} className="mt-2">
                 <button
-                  onClick={() => openMedia(getBaseUrl(link), "external")}
-                ></button>
+                  onClick={() => openMedia(link.href, "external")}
+                  className="relative w-full h-fit border cursor-pointer rounded-sm"
+                >
+                  {youtubeThumbnail ? (
+                    <img
+                      src={youtubeThumbnail}
+                      alt="YouTube Thumbnail"
+                      className="object-cover w-full rounded-sm"
+                    />
+                  ) : (
+                    <p className="text-white">Invalid YouTube link</p>
+                  )}
+                </button>
               </div>
-            ))
-          ) : (
-            <p>No external links</p>
-          )}
+            );
+          })}
         </div>
       </section>
 

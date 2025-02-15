@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-// Импорт компонентов и модулей Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode, Mousewheel } from "swiper/modules";
 import "swiper/css";
@@ -11,12 +10,12 @@ import "swiper/css/mousewheel";
 import "swiper/css/free-mode";
 
 import type { Swiper as SwiperCore } from "swiper/types";
-import type { ProjectCard, CloseGallery } from "@/types";
+import type { ProjectCard } from "@/types";
 
 interface CustomSwiperProps {
   cards: ProjectCard[];
   isGalleryOpen: boolean;
-  closeGallery: CloseGallery;
+  closeGallery: () => void;
   openGallery: (index: number) => void;
   handlePointerEnter: (project: ProjectCard) => void;
   handlePointerLeave: () => void;
@@ -94,7 +93,7 @@ export default function CustomSwiper({
       }}
       className="swiper-container"
     >
-      {cards.map((card, index) => {
+      {cards.map((card: ProjectCard, index: number) => {
         const bgImageUrl = card.image?.url
           ? "http://localhost:1337" + card.image.url
           : "/fallback.jpg";

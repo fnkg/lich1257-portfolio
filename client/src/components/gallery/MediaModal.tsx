@@ -7,8 +7,6 @@ interface MediaModalProps {
 }
 
 export default function MediaModal({ src, type, onClose }: MediaModalProps) {
-  console.log(src)
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"

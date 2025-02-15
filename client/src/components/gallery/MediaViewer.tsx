@@ -1,4 +1,3 @@
-// MediaViewer.tsx
 import Image from "next/image";
 import { getBaseUrl } from "@/utils/getUrl";
 
@@ -14,7 +13,7 @@ export default function MediaViewer({ type, src }: MediaViewerProps) {
     case "video":
       return (
         <video controls className="w-full h-full object-contain">
-          <source src={fullURL} type="video/mp4" />
+          <source src={src} type="video/mp4" />
         </video>
       );
     case "external":

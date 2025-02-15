@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { getGlobalSettings } from "@/data/loaders";
 import "@/styles/globals.css";
 
-
 async function loader() {
   const data = await getGlobalSettings();
   if (!data) notFound();
