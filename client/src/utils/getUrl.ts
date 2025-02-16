@@ -2,11 +2,12 @@ const YT_REGEX =
   /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
 
 export function getStrapiURL() {
-  return process.env.STRAPI_API_URL ?? "http://localhost:1337";
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:1337";
 }
 
 export function getBaseUrl(url: string): string {
-  const baseUrl = process.env.STRAPI_API_URL ?? "http://localhost:1337";
+  console.log("API_URL", process.env.NEXT_PUBLIC_API_URL);
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:1337";
   return `${baseUrl}${url}`;
 }
 

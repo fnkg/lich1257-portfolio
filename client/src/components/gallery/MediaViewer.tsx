@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { getBaseUrl, getYouTubeEmbedUrl } from "@/utils/getUrl";
+
+import { getYouTubeEmbedUrl } from "@/utils/getUrl";
 
 interface MediaViewerProps {
   src: string;
@@ -7,8 +8,6 @@ interface MediaViewerProps {
 }
 
 export default function MediaViewer({ type, src }: MediaViewerProps) {
-  const fullURL = getBaseUrl(src);
-
   switch (type) {
     case "video":
       return (
@@ -32,7 +31,7 @@ export default function MediaViewer({ type, src }: MediaViewerProps) {
       return (
         <div className="relative w-full h-full">
           <Image
-            src={fullURL}
+            src={src}
             alt="project media image"
             fill
             className="object-contain"

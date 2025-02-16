@@ -85,7 +85,7 @@ export default function Gallery({
             <div
               key={img.id || index}
               className="relative w-full h-fit mb-4 border cursor-pointer rounded-sm"
-              onClick={() => openMedia(img.url, "image")}
+              onClick={() => openMedia(getBaseUrl(img.url), "image")}
             >
               <img
                 src={getBaseUrl(img.url)}
