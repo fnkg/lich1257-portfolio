@@ -95,7 +95,7 @@ export default function CustomSwiper({
     >
       {cards.map((card: ProjectCard, index: number) => {
         const bgImageUrl = card.image?.url
-          ? "http://localhost:1337" + card.image.url
+          ? "https://admin.lich1257.com" + card.image.url
           : "/fallback.jpg";
 
         return (

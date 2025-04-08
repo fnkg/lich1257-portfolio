@@ -2,11 +2,14 @@ const YT_REGEX =
   /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
 
 export function getStrapiURL() {
-  return process.env.STRAPI_API_URL ?? "http://localhost:1337";
+  return process.env.NEXT_PUBLIC_API_URL ?? "https://admin.lich1257.com";
 }
 
 export function getBaseUrl(url: string): string {
-  const baseUrl = process.env.STRAPI_API_URL ?? "http://localhost:1337";
+  if (!url) return "/fallback.jpg";
+  if (url.startsWith("http")) return url;
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://admin.lich1257.com";
   return `${baseUrl}${url}`;
 }
 
