@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { getBaseUrl, getYouTubeThumbnail } from "@/utils/getUrl";
-import MediaModal from "./MediaModal";
+import { getBaseUrl, getYouTubeThumbnail } from "@/utils/get-url";
+import MediaModal from "./media-modal";
 
 import type {
   ExternalLink,
@@ -31,14 +31,12 @@ export default function Gallery({
     return null;
   }
 
-  const textContentBlock = project.content.find(
-    (block: DynamicComponent) => block.__component === "blocks.text-content",
+  const contentMap = new Map(
+    project.content.map((block) => [block.__component, block])
   );
-  const text = textContentBlock?.[language] ?? "";
 
-  const galleryBlock = project.content.find(
-    (block: DynamicComponent) => block.__component === "blocks.gallery",
-  );
+  const text = contentMap.get("blocks.text-content")?.[language] ?? "";
+  const galleryBlock = contentMap.get("blocks.gallery");
   const images = galleryBlock?.images ?? [];
   const videos = galleryBlock?.videos ?? [];
   const external = galleryBlock?.external ?? [];
@@ -48,9 +46,9 @@ export default function Gallery({
     type: MediaType;
   } | null>(null);
 
-  function openMedia(src: string, type: MediaType) {
-    setActiveMedia({ src, type });
-  }
+  const openMedia = (src: string, type: MediaType) => {
+    setActiveMedia((prev) => (prev?.src === src ? prev : { src, type }));
+  };
 
   function closeModal() {
     setActiveMedia(null);
@@ -58,7 +56,6 @@ export default function Gallery({
 
   return (
     <div className="fixed inset-0 z-30 flex">
-      {/* Левая часть (текст) */}
       <section className="relative flex flex-col w-1/3 p-4 bg-black border border-r-0">
         <button
           onClick={toggleLanguage}
@@ -72,7 +69,6 @@ export default function Gallery({
         <p className="px-4 text-2xl overflow-y-auto">{text}</p>
       </section>
 
-      {/* Правая часть (медиа) */}
       <section className="relative flex flex-col w-2/3 p-4 bg-black border">
         <button
           onClick={closeGallery}
@@ -111,7 +107,7 @@ export default function Gallery({
           ))}
 
           {external.map((link: ExternalLink, index: number) => {
-            const youtubeThumbnail = getYouTubeThumbnail(link.href);
+            const youtubeThumbnail = link.href.includes("youtube.com") ? getYouTubeThumbnail(link.href) : null;
             return (
               <div key={index} className="mt-2">
                 <button
@@ -134,7 +130,6 @@ export default function Gallery({
         </div>
       </section>
 
-      {/* Модальное окно для выбранного медиа */}
       {activeMedia && (
         <MediaModal
           src={activeMedia.src}

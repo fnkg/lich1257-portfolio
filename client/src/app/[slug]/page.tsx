@@ -1,22 +1,25 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug, getGalleryBySlug } from "@/data/loaders";
-import Slider from "@/components/category/Slider";
+import Slider from "@/components/category/slider";
 import { ProjectCard, ProjectGallery } from "@/types";
 
 async function loader(
   slug: string
 ): Promise<{ cards: ProjectCard[]; galleryData: ProjectGallery[] }> {
-  const page = await getPageBySlug(slug);
-  const gallery = await getGalleryBySlug(slug);
+  try {
+    const page = await getPageBySlug(slug);
+    const gallery = await getGalleryBySlug(slug);
 
-  if (!page.data.length) {
-    notFound();
+    return {
+      cards: page?.data?.[0]?.cards || [],
+      galleryData: gallery?.data || [],
+    };
+
+  } catch (error) {
+    console.error("Ошибка загрузки данных:", error);
+    return { cards: [], galleryData: [] };
   }
 
-  return {
-    cards: page.data[0]?.cards || [],
-    galleryData: gallery.data || [],
-  };
 }
 
 export default async function CategoryPage({
@@ -24,7 +27,7 @@ export default async function CategoryPage({
 }: {
   params: { slug: string };
 }) {
-  const { slug } = await params;
+  const { slug } = params;
   const { cards, galleryData } = await loader(slug);
 
   return (

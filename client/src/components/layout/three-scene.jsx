@@ -239,7 +239,6 @@ const ThreeScene = () => {
             switch (event.keyCode) {
                 case 79: // O
                     activeCamera = cameraOrtho;
-                    activeHelper = cameraOrthoHelper;
                     break;
                 case 80: // P
                     activeCamera = cameraPerspective;

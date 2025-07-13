@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Dropdown from "@/components/layout/Dropdown";
+import Dropdown from "@/components/layout/dropdown";
 import type { LinkProps, DropdownProps } from "@/types";
-import AudioMenu from "../AudioMenu";
+import AudioMenu from "../audio-menu";
 
 interface HeaderProps {
   data: {

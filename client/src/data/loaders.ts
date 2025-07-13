@@ -1,6 +1,6 @@
 import qs from "qs";
-import { fetchAPI } from "@/utils/fetchApi";
-import { getStrapiURL } from "@/utils/getUrl";
+import { fetchAPI } from "@/utils/fetch-api";
+import { getStrapiURL } from "@/utils/get-url";
 
 const BASE_URL = getStrapiURL();
 

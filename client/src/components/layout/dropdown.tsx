@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { LinkProps } from "@/types";
 import { useEffect, useState } from "react";
-import { randomText } from "@/utils/randomText";
+import { randomText } from "@/utils/random-text";
 
 interface DropdownComponentProps {
   links: LinkProps[];

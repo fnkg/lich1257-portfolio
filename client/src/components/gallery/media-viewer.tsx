@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getYouTubeEmbedUrl } from "@/utils/getUrl";
+import { getYouTubeEmbedUrl } from "@/utils/get-url";
 
 interface MediaViewerProps {
   src: string;

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { freepixel } from "@/fonts";
-import { Header } from "@/components/layout/Header";
-import ClientThreeScene from "@/components/layout/ClientThreeScene";
+import { Header } from "@/components/layout/header";
+import ClientThreeScene from "@/components/layout/client-three-scene";
 import { getGlobalSettings } from "@/data/loaders";
 import "@/styles/globals.css";
 

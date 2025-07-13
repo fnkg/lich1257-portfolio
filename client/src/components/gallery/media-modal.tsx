@@ -1,4 +1,4 @@
-import MediaViewer from "./MediaViewer";
+import MediaViewer from "./media-viewer";
 
 interface MediaModalProps {
   src: string;

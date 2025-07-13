@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import CustomSwiper from "@/components/category/CustomSwiper";
-import Gallery from "@/components/gallery/Gallery";
+import CustomSwiper from "@/components/category/custom-swiper";
+import Gallery from "@/components/gallery/gallery";
 import "@/styles/slider.css";
 
 import type { ProjectCard, ProjectGallery, Local } from "@/types";
@@ -13,38 +13,37 @@ interface SliderProps {
   galleryData: ProjectGallery[];
 }
 
+interface HoverState {
+  isHovering: boolean;
+  pointerPosition: { x: number; y: number };
+  hoveredProject?: ProjectCard | null;
+}
+
 export default function Slider({ cards, galleryData }: SliderProps) {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [language, setLanguage] = useState<Local>("en");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  const [hoverState, setHoverState] = useState<{
-    isHovering: boolean;
-    pointerPosition: { x: number; y: number };
-    hoveredProject: ProjectCard | null;
-  }>({
+  const [hoverState, setHoverState] = useState<HoverState>({
     isHovering: false,
     pointerPosition: { x: 0, y: 0 },
-    hoveredProject: null,
   });
 
-  const handlePointerMove = (
-    e: React.PointerEvent<HTMLDivElement>,
-    project: ProjectCard,
-  ) => {
-    setHoverState((prev) => ({
-      ...prev,
-      pointerPosition: { x: e.clientX, y: e.clientY },
-      hoveredProject: project,
-    }));
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    setHoverState((prev) => {
+      if (prev.pointerPosition.x === e.clientX && prev.pointerPosition.y === e.clientY) {
+        return prev;
+      }
+      return { ...prev, pointerPosition: { x: e.clientX, y: e.clientY } };
+    });
   };
 
   const handlePointerEnter = (project: ProjectCard) => {
-    setHoverState((prev) => ({
-      ...prev,
+    setHoverState({
       isHovering: true,
+      pointerPosition: hoverState.pointerPosition,
       hoveredProject: project,
-    }));
+    });
   };
 
   const handlePointerLeave = () => {
