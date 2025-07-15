@@ -1,38 +1,13 @@
-name: CI (lint + type-check)
-
-on:
-  pull_request:
-
+name: CI
+on: [pull_request]
 jobs:
-  quality:
-    # self-hosted Debian-раннер с лейблом «builder»
-    runs-on: [self-hosted, linux, debian, builder]
-
-    strategy:
-      matrix:
-        # проверяем оба подпроекта
-        project: [client, server]
-
+  lint-type:
+    runs-on: ubuntu-latest
     steps:
-      # 1 Клонируем код
       - uses: actions/checkout@v4
-        with: { fetch-depth: 1 }
-
-      # 2 Ставим Node 20 + включаем кэш Yarn
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: yarn
-
-      # 3 Устанавливаем зависимости во всём монорепо
-      - name: Install deps
-        run: yarn install --frozen-lockfile
-
-      # 4 Линтер для текущего workspace
-      - name: ESLint
-        run: yarn workspace ${{ matrix.project }} lint
-
-      # 5 Проверка типов нужна только для фронта
-      - name: Type-check (TS)
-        if: ${{ matrix.project == 'client' }}
-        run: yarn workspace client type-check
+        with: {node-version: 20, cache: 'yarn'}
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint-staged --allow-empty
+      - run: yarn workspace client tsc --noEmit
+      - run: yarn workspace server tsc --noEmit

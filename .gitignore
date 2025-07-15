@@ -1,16 +1,17 @@
 /.turbo
 /.vscode
+/.temp
 
 /node_modules
-/yarn.lock
+# /yarn.lock
 /package-lock.json
 
 /client/node_modules
 /client/dist
 /client/.next
 /client/.env
-/client/yarn.lock
+# /client/yarn.lock
 
 /server/node_modules
 /server/.env
-/server/yarn.lock
+# /server/yarn.lock
