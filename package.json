@@ -1,0 +1,34 @@
+{
+  "name": "lich1257-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "i": "yarn install",
+    "dev:turbo": "turbo run dev --filter=client --parallel",
+    "dev:client": "yarn workspace client dev",
+    "dev:server": "yarn workspace server develop",
+    "cz": "git-cz",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "commitizen": "^4",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "turbo": "^2.5.4"
+  },
+  "lint-staged": {
+    "client/**/*.{js,ts,tsx}": "eslint --fix",
+    "server/**/*.{js,ts}": "eslint --fix"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
