@@ -9,22 +9,27 @@
   ],
   "scripts": {
     "i": "yarn install",
-    "dev:turbo": "turbo run dev --filter=client --parallel",
+    "install client": "yarn workspace client install",
     "dev:client": "yarn workspace client dev",
     "dev:server": "yarn workspace server develop",
+    "turbo dev": "turbo run dev --filter=client --parallel",
+    "lint:client": "yarn --cwd client lint",
     "cz": "git-cz",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "commitizen": "^4",
+    "@types/node": "^24.0.14",
+    "commitizen": "^4.0.0",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "turbo": "^2.5.4"
   },
   "lint-staged": {
-    "client/**/*.{js,ts,tsx}": "eslint --fix",
-    "server/**/*.{js,ts}": "eslint --fix"
+    "client/**/*.{js,ts,tsx}": [
+      "eslint --fix --config client/eslint.config.mjs",
+      "prettier --write"
+    ]
   },
   "config": {
     "commitizen": {

@@ -15,15 +15,11 @@ interface HeaderProps {
 }
 
 export function Header({ data }: HeaderProps) {
-  if (!data) return null;
-  const { link, dropdown } = data;
-
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
   );
 
   const navRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
@@ -36,6 +32,9 @@ export function Header({ data }: HeaderProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (!data) return null;
+  const { link, dropdown } = data;
 
   const handleDropdownToggle = (idx: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === idx ? null : idx));

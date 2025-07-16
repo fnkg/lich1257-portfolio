@@ -5,14 +5,7 @@ import { useState } from "react";
 import { getBaseUrl, getYouTubeThumbnail } from "@/utils/get-url";
 import MediaModal from "./media-modal";
 
-import type {
-  ExternalLink,
-  MediaType,
-  Project,
-  DynamicComponent,
-  Image,
-  Local,
-} from "@/types";
+import type { ExternalLink, MediaType, Project, Image, Local } from "@/types";
 
 interface GalleryProps {
   project: Project;
@@ -27,12 +20,17 @@ export default function Gallery({
   closeGallery,
   toggleLanguage,
 }: GalleryProps) {
+  const [activeMedia, setActiveMedia] = useState<{
+    src: string;
+    type: MediaType;
+  } | null>(null);
+
   if (!project.content) {
     return null;
   }
 
   const contentMap = new Map(
-    project.content.map((block) => [block.__component, block])
+    project.content.map((block) => [block.__component, block]),
   );
 
   const text = contentMap.get("blocks.text-content")?.[language] ?? "";
@@ -40,11 +38,6 @@ export default function Gallery({
   const images = galleryBlock?.images ?? [];
   const videos = galleryBlock?.videos ?? [];
   const external = galleryBlock?.external ?? [];
-
-  const [activeMedia, setActiveMedia] = useState<{
-    src: string;
-    type: MediaType;
-  } | null>(null);
 
   const openMedia = (src: string, type: MediaType) => {
     setActiveMedia((prev) => (prev?.src === src ? prev : { src, type }));
@@ -107,7 +100,9 @@ export default function Gallery({
           ))}
 
           {external.map((link: ExternalLink, index: number) => {
-            const youtubeThumbnail = link.href.includes("youtube.com") ? getYouTubeThumbnail(link.href) : null;
+            const youtubeThumbnail = link.href.includes("youtube.com")
+              ? getYouTubeThumbnail(link.href)
+              : null;
             return (
               <div key={index} className="mt-2">
                 <button
