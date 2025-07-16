@@ -1,7 +1,5 @@
 ### Структура проекта
 
-![Dependabot](https://badgen.net/dependabot/<user>/<repo>)
-
 #### Клиент
 
 _Next.js v15.1.7, TypeScript, Swiper.js v11.2.3, Tailwind.css v4.0.6_

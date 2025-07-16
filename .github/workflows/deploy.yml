@@ -1,69 +1,31 @@
-name: Build & Deploy
-
+name: Deploy to VDS
 on:
   push:
     branches: [main]
 
-env:
-  REGISTRY: ghcr.io/${{ github.repository }}
-
 jobs:
-  # ───────── build ─────────
-  build:
-    runs-on: [self-hosted, linux, debian, builder]
-    outputs:
-      img_tag: ${{ steps.meta.outputs.tag }}
-
+  deploy:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 1 }
 
-      # короткий SHA станет тегом образов
-      - name: Compute image tag
-        id: meta
-        run: echo "tag=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
-
-      - uses: actions/setup-node@v4
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          node-version: 20
-          cache: yarn
-      - run: yarn install --frozen-lockfile
+          ssh-private-key: ${{ secrets.VDS_SSH_KEY }}
+          known_hosts: ${{ secrets.VDS_KNOWN_HOSTS }}
 
-      # логинимся в GitHub Container Registry
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # ⬆ Strapi-образ (контекст server/)
-      - name: Build Strapi image
-        uses: docker/build-push-action@v5
-        with:
-          context: server
-          push: true
-          tags: ${{ env.REGISTRY }}-strapi:${{ steps.meta.outputs.tag }}
-
-      # ⬆ Front-образ (контекст client/)
-      - name: Build Frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: client
-          push: true
-          tags: ${{ env.REGISTRY }}-front:${{ steps.meta.outputs.tag }}
-
-  # ───────── deploy ─────────
-  deploy:
-    needs: build
-    runs-on: [self-hosted, linux, debian, vds]   # этот runner работает прямо на VDS
-    env:
-      TAG: ${{ needs.build.outputs.img_tag }}
-
-    steps:
-      - name: Pull & restart containers
+      - name: Deploy over SSH
+        env:
+          HOST: ${{ secrets.VDS_HOST }}
+          USER: ${{ secrets.VDS_USER }}
+          DIR:  ${{ secrets.VDS_DIR }}
+          PORT: ${{ secrets.VDS_SSH_PORT }}
         run: |
-          cd /home/deploy/app
-          export TAG=${TAG}
-          docker compose pull
-          docker compose up -d
-          docker image prune -f --filter "until=24h"
+          ssh -p $PORT $USER@$HOST <<'EOF'
+            set -e
+            cd "$DIR"
+            git pull origin main
+            docker compose -f docker/docker-compose.yml pull
+            docker compose -f docker/docker-compose.yml up -d --build
+          EOF

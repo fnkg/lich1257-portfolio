@@ -1,10 +1,9 @@
-import { notFound } from "next/navigation";
 import { getPageBySlug, getGalleryBySlug } from "@/data/loaders";
 import Slider from "@/components/category/slider";
 import { ProjectCard, ProjectGallery } from "@/types";
 
 async function loader(
-  slug: string
+  slug: string,
 ): Promise<{ cards: ProjectCard[]; galleryData: ProjectGallery[] }> {
   try {
     const page = await getPageBySlug(slug);
@@ -14,20 +13,18 @@ async function loader(
       cards: page?.data?.[0]?.cards || [],
       galleryData: gallery?.data || [],
     };
-
   } catch (error) {
     console.error("Ошибка загрузки данных:", error);
     return { cards: [], galleryData: [] };
   }
-
 }
 
 export default async function CategoryPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const { cards, galleryData } = await loader(slug);
 
   return (
