@@ -1,5 +1,9 @@
 name: Deploy to VDS
 
+permissions:
+  contents: read
+  variables: read
+
 on:
   push:
     branches: [main]
@@ -24,7 +28,7 @@ jobs:
       - name: Add VDS to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -p "${{ vars.VDS_PORT }}" "${{ vars.VDS_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Deploy over SSH
         run: |
