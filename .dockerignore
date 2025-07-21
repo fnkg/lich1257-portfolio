@@ -1,0 +1,14 @@
+.git
+.gitignore
+tmp
+temp
+.tmp
+.temp
+.next
+node_modules
+Dockerfile
+docker-compose.yml
+README.md
+**/logs
+**/*.log
+# server/
