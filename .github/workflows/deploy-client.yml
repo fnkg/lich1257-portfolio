@@ -93,6 +93,9 @@ jobs:
             docker run -d \
               --name "$CONTAINER_NAME" \
               --restart unless-stopped \
+              --log-driver json-file \
+              --log-opt max-size=10m \
+              --log-opt max-file=5 \
               -p 3000:3000 \
               "$IMAGE_NAME:$TAG"
 
