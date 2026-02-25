@@ -3,6 +3,15 @@ name: Deploy Client
 on:
   push:
     branches: [main]
+    paths:
+      - "client/**"
+      - "client/Dockerfile"
+      - "package.json"
+      - "yarn.lock"
+      - "server/package.json"
+      - "tsconfig.base.json"
+      - ".dockerignore"
+      - ".github/workflows/deploy-client.yml"
   workflow_dispatch:
 
 permissions:
